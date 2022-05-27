@@ -2,7 +2,7 @@ function renderWaterfall(rootNode, columnCount, elementGap) {
   let columnsContainer = document.createElement("section");
   document.body.append(columnsContainer);
 
-  let columns = creatColumns(columnCount);
+  let columns = createColumns(columnCount);
   columnsContainer.append(...columns);
 
   setGap(elementGap, columnsContainer, ...columns);
@@ -14,15 +14,15 @@ function renderWaterfall(rootNode, columnCount, elementGap) {
   columnsContainer.style.display = "flex";
 }
 
-function creatColumns(columnCount) {
+function createColumns(columnCount) {
   let columns = [];
   for (let i = 0; i < columnCount; i++) {
-    columns.push(creatColumn());
+    columns.push(createColumn());
   }
   return columns;
 }
 
-function creatColumn() {
+function createColumn() {
   let column = document.createElement("div");
   column.style.display = "flex";
   column.style.flexDirection = "column";
