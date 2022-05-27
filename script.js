@@ -5,12 +5,13 @@ function renderWaterfall(rootNode, columnCount, elementGap) {
   let columns = creatColumns(columnCount);
   columnsContainer.append(...columns);
 
+  setGap(elementGap, columnsContainer, ...columns);
+
   Array.from(rootNode.getElementsByClassName("el")).forEach((el) =>
     getShortestColumn(columns).append(el)
   );
 
   columnsContainer.style.display = "flex";
-  setGap(elementGap, columnsContainer, ...columns);
 }
 
 function creatColumns(columnCount) {
