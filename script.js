@@ -1,57 +1,49 @@
 function renderWaterfall(rootNode, columnCount, elementGap) {
-  let columns = [];
-  for (let i = 0; i < columnCount; i++) {
-    let div = document.createElement("div");
-    div.classList.add("column");
-    div.style.gap = elementGap + "px";
-    columns.push(div);
-  }
-
-  let elArr = [];
-  elArr.push(...rootNode.getElementsByClassName("el"));
-
-  // for (let el of rootNode.getElementsByClassName("el")) {
-  //   elArr.push(el);
-  // }
-
-  for (let el of elArr) {
-    let shortestColumn = getShortestColumn(columns);
-    shortestColumn.append(el);
-  }
-
   let columnsContainer = document.createElement("section");
-  columnsContainer.style.gap = elementGap + "px";
-  columnsContainer.classList.add("section");
-
-  for (let column of columns) {
-    columnsContainer.append(column);
-  }
-
   document.body.append(columnsContainer);
 
-  function getShortestColumn(columns) {
-    let indexOfShortest = 0;
-    let minContentLength = getContentLength(columns[0]);
+  let columns = creatColumns(columnCount);
+  columnsContainer.append(...columns);
 
-    for (let i = 0; i < columns.length; i++) {
-      let curContentLength = getContentLength(columns[i]);
-      if (curContentLength < minContentLength) {
-        minContentLength = curContentLength;
-        indexOfShortest = i;
-      }
-    }
+  Array.from(rootNode.getElementsByClassName("el")).forEach((el) =>
+    getShortestColumn(columns).append(el)
+  );
 
-    return columns[indexOfShortest];
-  }
-
-  function getContentLength(column) {
-    let length = 0;
-    for (let child of column.childNodes) {
-      length += child.textContent.length;
-    }
-    return length;
-  }
+  columnsContainer.style.display = "flex";
+  setGap(elementGap, columnsContainer, ...columns);
 }
 
-renderWaterfall(document.getElementsByClassName("root")[0], 3, 20);
+function creatColumns(columnCount) {
+  let columns = [];
+  for (let i = 0; i < columnCount; i++) {
+    columns.push(creatColumn());
+  }
+  return columns;
+}
 
+function creatColumn() {
+  let column = document.createElement("div");
+  column.style.display = "flex";
+  column.style.flexDirection = "column";
+  return column;
+}
+
+function getShortestColumn(columns) {
+  let indexOfShortest = 0;
+  let minHeight = columns[0].offsetHeight;
+
+  for (let i = 0; i < columns.length; i++) {
+    if (columns[i].offsetHeight < minHeight) {
+      minHeight = columns[i].offsetHeight;
+      indexOfShortest = i;
+    }
+  }
+
+  return columns[indexOfShortest];
+}
+
+function setGap(elementGap, ...tags) {
+  tags.forEach((tag) => (tag.style.gap = elementGap + "px"));
+}
+
+renderWaterfall(document.querySelector("div.root"), 3, 20);
